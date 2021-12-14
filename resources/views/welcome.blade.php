@@ -20,7 +20,5 @@
                     The North's Best Pizzas
                 </div>
             </div>
-
-           
         </div>
 @endsection
