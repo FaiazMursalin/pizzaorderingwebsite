@@ -7,6 +7,10 @@ use App\Models\Pizza;
 
 class PizzaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['store','create']);
+    }
     public function index(){
         //get data from db
     //$pizzas = Pizza::all();
