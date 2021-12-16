@@ -3,28 +3,44 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Pizza;
 
 class PizzaController extends Controller
 {
     public function index(){
         //get data from db
-    $pizzas = [
-        ['type'=> 'hawaiian', 'base'=> 'cheesy crust' ],
-        ['type'=> 'meat', 'base'=> 'thin crust' ],
-        ['type'=> 'chicken', 'base'=> 'thick crust' ]
-    ];
-    // $name = request('name');
-    // $age = request('age');
+    //$pizzas = Pizza::all();
+    // $pizzas = Pizza::orderBy('base')->get();
+    // $pizzas = Pizza:: where('type','hawaian')->get();
+    $pizzas = Pizza::latest()->get();
+ 
 
-    return view('pizzas',[
-        'pizzas' => $pizzas,
-        'name' => request('name'),
-        'age' => request('age')
+    return view('pizzas.index',[
+        'pizzas' => $pizzas,    
     ]);
     }
     public function show($id){
-        //use the $id variable to query through the db for the record 
+    //use the $id variable to query through the db for the record 
+    $pizza = pizza::findorfail($id);
     //should do validation too if id is a number or not 
-    return view('details', ['id' => $id]);
+    return view('pizzas.show', ['pizza' => $pizza]);
+    }
+    public function create(){
+        return view('pizzas.create');
+    }
+    public function store(){
+        // request('name');
+        // request('type');
+        // request('base');
+
+        $pizza = new Pizza();
+        $pizza-> name = request('name');
+        $pizza->type = request('type');
+        $pizza->base = request('base');
+
+        $pizza->save();
+
+        
+        return redirect('/')->with('mssg','Thanks for your order');
     }
 }
