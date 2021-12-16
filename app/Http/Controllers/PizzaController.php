@@ -21,7 +21,7 @@ class PizzaController extends Controller
     }
     public function show($id){
     //use the $id variable to query through the db for the record 
-    $pizza = pizza::findorfail($id);
+    $pizza = pizza::findOrFail($id);
     //should do validation too if id is a number or not 
     return view('pizzas.show', ['pizza' => $pizza]);
     }
@@ -37,10 +37,20 @@ class PizzaController extends Controller
         $pizza-> name = request('name');
         $pizza->type = request('type');
         $pizza->base = request('base');
+        $pizza->toppings = request('toppings');
+        //transform the array to json field for that column
+
 
         $pizza->save();
 
         
         return redirect('/')->with('mssg','Thanks for your order');
+    }
+    public function destroy($id){
+        $pizza = Pizza::findOrFail($id);
+        $pizza->delete();
+        return redirect('/pizzas');
+
+
     }
 }
